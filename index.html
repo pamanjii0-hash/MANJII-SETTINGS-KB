@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MANJII VVIP KB - Remote Panel</title>
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --bg-color: #05050a;
-            --accent-color: #ff007f; /* Default Accent */
-            --glass-bg: rgba(20, 20, 35, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --ac1: #ff007f; /* Aksen 1: Pink */
+            --ac2: #7928ca; /* Aksen 2: Ungu */
+            --glass-bg: rgba(15, 10, 25, 0.55);
             --text-main: #ffffff;
             --text-muted: #8a8aab;
         }
@@ -26,87 +28,148 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 0%, rgba(255,0,127,0.1) 0%, transparent 50%);
+            background-image: radial-gradient(circle at 50% -20%, rgba(121, 40, 202, 0.15) 0%, transparent 60%);
         }
 
-        /* TAMPILAN KACA (GLASSMORPHISM) */
+        /* ANIMASI GRADASI UNTUK TEKS & TOMBOL */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px var(--ac1), inset 0 0 10px rgba(0,0,0,0.5); }
+            50% { box-shadow: 0 0 25px var(--ac2), inset 0 0 10px rgba(0,0,0,0.5); }
+            100% { box-shadow: 0 0 15px var(--ac1), inset 0 0 10px rgba(0,0,0,0.5); }
+        }
+
+        .text-gradient {
+            background: linear-gradient(270deg, var(--ac1), var(--ac2), var(--ac1));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s ease infinite;
+            text-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+        }
+
+        /* TAMPILAN KACA DENGAN STROKE MENYALA */
         .glass-panel {
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid transparent;
+            border-image: linear-gradient(45deg, var(--ac1), var(--ac2)) 1;
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 0 25px rgba(121, 40, 202, 0.3), inset 0 0 15px rgba(255, 0, 127, 0.1);
+            position: relative;
+        }
+        /* Fallback border-radius untuk border-image */
+        .glass-panel::before {
+            content: ""; position: absolute; inset: 0; border-radius: 20px;
+            padding: 1.5px; background: linear-gradient(45deg, var(--ac1), var(--ac2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
         }
 
         .logo-container { text-align: center; margin-bottom: 20px; }
-        .logo-container img { width: 120px; height: auto; border-radius: 50%; box-shadow: 0 0 20px var(--accent-color); }
+        .logo-container img { width: 120px; height: auto; border-radius: 50%; box-shadow: 0 0 25px var(--ac1); }
         
-        .title { text-align: center; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; color: var(--accent-color); text-shadow: 0 0 15px var(--accent-color); }
-        .subtitle { text-align: center; font-size: 12px; color: var(--text-muted); margin-bottom: 25px; }
+        .title { text-align: center; font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { text-align: center; font-size: 12px; color: var(--text-muted); margin-bottom: 25px; letter-spacing: 1px; }
 
-        /* FORM & BUTTONS */
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .input-group input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.5); color: #fff; outline: none; transition: 0.3s; text-align: center; font-size: 15px; }
-        .input-group input:focus { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(255,0,127,0.3); }
+        /* FORM INPUT */
+        .input-group { margin-bottom: 18px; position: relative; }
+        .input-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .input-group input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); background: rgba(5,5,10,0.7); color: #fff; outline: none; transition: 0.3s; text-align: center; font-size: 15px; font-weight: 600; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+        .input-group input:focus { border-color: var(--ac1); box-shadow: 0 0 15px var(--ac1), inset 0 0 10px rgba(0,0,0,0.8); }
 
-        .btn { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--accent-color); background: transparent; color: var(--text-main); font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: 0.3s; text-transform: uppercase; box-shadow: 0 0 15px rgba(255,0,127,0.2); }
-        .btn:hover { background: var(--accent-color); color: #fff; box-shadow: 0 0 25px var(--accent-color); transform: translateY(-2px); }
+        /* TOMBOL MEWAH (ANIMASI GRADASI + TENGAH BLUR) */
+        .btn { 
+            width: 100%; padding: 16px; border-radius: 12px; border: none;
+            background: linear-gradient(270deg, var(--ac1), var(--ac2), var(--ac1));
+            background-size: 200% 200%;
+            color: #fff; font-weight: 800; letter-spacing: 1.5px; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+            animation: gradientMove 3s ease infinite, pulseGlow 2s infinite;
+            position: relative; overflow: hidden;
+        }
+        /* Efek blur bagian tengah tombol */
+        .btn::after {
+            content: ''; position: absolute; top: 15%; left: 10%; right: 10%; bottom: 15%;
+            background: rgba(0,0,0,0.25); filter: blur(5px); border-radius: 8px; z-index: 1; pointer-events: none;
+        }
+        .btn span { position: relative; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.2); }
+        .btn:active { transform: translateY(1px); }
         
         /* VIEWS PENGKONDISIAN */
-        #login-view, #main-app-view { display: none; width: 100%; max-width: 500px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
+        #login-view, #main-app-view { display: none; width: 100%; max-width: 500px; margin: 0 auto; padding: 20px; padding-bottom: 90px; }
         .active-view { display: block !important; animation: fadeIn 0.4s ease-out; }
 
         /* TABS BAWAH (BOTTOM NAVIGATION BAR) */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; }
-        .nav-item { color: var(--text-muted); text-align: center; cursor: pointer; transition: 0.3s; flex: 1; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 5px; }
-        .nav-item span { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        .nav-item.active { color: var(--accent-color); text-shadow: 0 0 10px var(--accent-color); }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        .nav-item { color: var(--text-muted); text-align: center; cursor: pointer; transition: 0.3s; flex: 1; position: relative; }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 6px; transition: 0.3s; }
+        .nav-item span { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; transition: 0.3s; }
+        .nav-item.active { color: #fff; }
+        .nav-item.active i { background: linear-gradient(270deg, var(--ac1), var(--ac2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px var(--ac1); transform: translateY(-3px); }
 
-        /* KONTEN TAB */
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: slideUp 0.3s ease-out; }
 
-        /* DASHBOARD ADMIN CARDS */
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; text-align: center; }
-        .stat-card h3 { font-size: 24px; color: var(--accent-color); }
-        .stat-card p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
+        /* DASHBOARD ADMIN CARDS & LIST */
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: rgba(5,5,10,0.6); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top:0; left:0; width:100%; height:2px; background: linear-gradient(90deg, var(--ac1), var(--ac2)); }
+        .stat-card h3 { font-size: 26px; font-weight: 800; }
+        .stat-card p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
         
-        .user-list { max-height: 400px; overflow-y: auto; }
-        .user-card { background: rgba(0,0,0,0.5); border-left: 3px solid var(--accent-color); padding: 12px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .user-info h4 { font-size: 14px; margin-bottom: 3px; }
-        .user-info p { font-size: 11px; color: var(--text-muted); }
-        .user-actions select { background: #111; color: #fff; border: 1px solid var(--glass-border); padding: 5px; border-radius: 5px; outline: none; }
+        .user-list { max-height: 450px; overflow-y: auto; padding-right: 5px; margin-top: 15px; }
+        .user-list::-webkit-scrollbar { width: 5px; }
+        .user-list::-webkit-scrollbar-thumb { background: var(--ac2); border-radius: 5px; }
+        
+        .user-card { background: rgba(10,10,15,0.8); border: 1px solid rgba(255,255,255,0.05); padding: 15px; margin-bottom: 12px; border-radius: 12px; position: relative; display: flex; flex-direction: column; gap: 10px; transition: 0.3s; }
+        .user-card:hover { border-color: var(--ac2); box-shadow: 0 0 15px rgba(121, 40, 202, 0.2); }
+        .user-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
+        .user-info h4 { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; color: #fff; }
+        .user-info p { font-size: 10px; margin-top: 3px; font-family: monospace; letter-spacing: 1px; }
+        .user-target { background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
+        .target-hl { color: var(--ac1); font-weight: bold; font-size: 13px; }
+        
+        /* TOMBOL AKSI ADMIN RAPIH */
+        .user-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 5px; }
+        .act-btn { flex: 1; padding: 8px 0; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.05); color: #fff; }
+        .act-btn:hover { transform: scale(1.05); }
+        .act-on { border: 1px solid #0f0; box-shadow: 0 0 10px rgba(0,255,0,0.2); color: #0f0; }
+        .act-pause { border: 1px solid #ff9500; box-shadow: 0 0 10px rgba(255,149,0,0.2); color: #ff9500; }
+        .act-ban { border: 1px solid #ff3b30; box-shadow: 0 0 10px rgba(255,59,48,0.2); color: #ff3b30; }
+        .act-del { border: 1px solid #8a8aab; background: rgba(255,0,0,0.1); }
 
-        /* COLOR PICKER */
-        .color-picker-container { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-top: 20px; }
-        input[type="color"] { border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; background: transparent; }
+        /* COLOR PICKERS */
+        .color-picker-container { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 12px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.05); }
+        input[type="color"] { border: none; width: 35px; height: 35px; border-radius: 8px; cursor: pointer; background: transparent; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* TOGGLE LOGIN */
-        .login-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
-        .login-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: var(--text-muted); font-size: 12px; font-weight: 600; text-transform: uppercase; }
-        .login-tab.active { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); }
+        .login-tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; }
+        .login-tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; color: var(--text-muted); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .login-tab.active { color: #fff; background: rgba(255,255,255,0.05); border-bottom: 2px solid var(--ac1); text-shadow: 0 0 10px var(--ac1); }
 
-        /* LOADER */
-        #loader { display: none; text-align: center; margin: 10px 0; font-size: 14px; color: var(--accent-color); }
+        #loader { display: none; text-align: center; margin: 15px 0; font-size: 13px; font-weight: 600; color: var(--ac1); animation: pulseGlow 1s infinite alternate; }
     </style>
 </head>
 <body>
 
+    <!-- 1. LOGIN VIEW -->
     <div id="login-view" class="active-view">
-        <div class="glass-panel">
+        <div class="glass-panel" style="margin-top: 20px;">
             <div class="logo-container">
-                <img src="logo.png" alt="MANJII Logo" onerror="this.src='https://placehold.co/120x120/111/ff007f?text=M'">
+                <img src="logo.png" alt="Logo" onerror="this.src='https://placehold.co/120x120/111/ff007f?text=VVIP'">
             </div>
-            <div class="title">MANJII VVIP</div>
-            <div class="subtitle">Cloud Remote Authentication</div>
+            <div class="title text-gradient">MANJII VVIP</div>
+            <div class="subtitle">Cloud Remote Authentication System</div>
 
             <div class="login-tabs">
                 <div class="login-tab active" onclick="switchLogin('vip')">VIP Login</div>
@@ -115,153 +178,182 @@
 
             <div id="form-vip">
                 <div class="input-group">
-                    <label>License Key</label>
-                    <input type="text" id="vip-key" placeholder="MANJII_XXX">
+                    <label><i class="fas fa-key"></i> License Key</label>
+                    <input type="text" id="vip-key" placeholder="MANJII_XXX...">
                 </div>
                 <div class="input-group">
-                    <label>Player Name / Alias</label>
+                    <label><i class="fas fa-user-tag"></i> Player Alias</label>
                     <input type="text" id="vip-name" placeholder="Nama Anda...">
                 </div>
-                <button class="btn" onclick="loginVIP()">Masuk ke Panel VIP</button>
+                <button class="btn" onclick="loginVIP()"><span>Masuk Panel VIP</span></button>
             </div>
 
             <div id="form-admin" style="display: none;">
                 <div class="input-group">
-                    <label>Username</label>
+                    <label><i class="fas fa-shield-alt"></i> Username</label>
                     <input type="text" id="admin-user" placeholder="Admin Username">
                 </div>
                 <div class="input-group">
-                    <label>Password</label>
+                    <label><i class="fas fa-lock"></i> Password</label>
                     <input type="password" id="admin-pass" placeholder="••••••••">
                 </div>
-                <button class="btn" onclick="loginAdmin()">Masuk ke Dashboard</button>
+                <button class="btn" onclick="loginAdmin()"><span>Akses Database</span></button>
             </div>
 
-            <div id="loader"><i class="fas fa-spinner fa-spin"></i> Menghubungkan ke Server...</div>
+            <div id="loader"><i class="fas fa-satellite-dish fa-spin"></i> Menghubungkan ke Cloud...</div>
         </div>
     </div>
 
+    <!-- 2. MAIN APP VIEW -->
     <div id="main-app-view">
         
-        <div style="text-align: center; margin-bottom: 20px;">
-            <img src="logo.png" alt="Logo" style="width: 50px; border-radius: 50%; margin-bottom: 10px;" onerror="this.src='https://placehold.co/50x50/111/ff007f?text=M'">
-            <h2 style="font-size: 16px; color: var(--accent-color); text-transform: uppercase;">MANJII ENGINE PANEL</h2>
-            <p style="font-size: 10px; color: var(--text-muted);" id="user-welcome-text">Loading...</p>
+        <div style="text-align: center; margin-bottom: 25px;">
+            <h2 class="title text-gradient" style="font-size: 18px;">MANJII ENGINE PANEL</h2>
+            <p style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;" id="user-welcome-text">Loading...</p>
         </div>
 
+        <!-- TAB: HOME -->
         <div id="tab-home" class="tab-content active glass-panel">
-            <h3 style="text-align: center; margin-bottom: 20px;"><i class="fas fa-dice"></i> TARGET SETTINGS</h3>
+            <h3 style="text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 16px;"><i class="fas fa-crosshairs text-gradient"></i> TARGET INJECTOR</h3>
+            
+            <!-- INPUT KHUSUS ADMIN DI MENU HOME -->
+            <div id="admin-target-key-container" style="display: none;" class="input-group">
+                <label style="color: var(--ac1);"><i class="fas fa-search"></i> Target License Key (VIP)</label>
+                <input type="text" id="admin-target-key" placeholder="Masukkan Key VIP yang mau diubah...">
+            </div>
+
             <div class="input-group">
                 <label>Target Angka Dadu</label>
                 <input type="number" id="set-angka" placeholder="Contoh: 28">
             </div>
             <div class="input-group">
-                <label>Jumlah Dadu Dimainkan</label>
+                <label>Total Jumlah Dadu</label>
                 <input type="number" id="set-jumlah" placeholder="Contoh: 9" value="9">
             </div>
-            <button class="btn" onclick="setDaduOnline()">KUNCI ANGKA ONLINE</button>
-            <p style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 15px;">Angka akan langsung tersinkronisasi dengan Userscript di browser Anda secara real-time.</p>
+            <button class="btn" onclick="setDaduOnline()"><span>KUNCI ANGKA KE SERVER</span></button>
         </div>
 
+        <!-- TAB: DEVELOPER & TEMA -->
         <div id="tab-dev" class="tab-content glass-panel">
-            <h3 style="text-align: center; margin-bottom: 20px;"><i class="fas fa-code"></i> DEVELOPER INFO</h3>
+            <h3 style="text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 16px;"><i class="fas fa-microchip text-gradient"></i> DEVELOPER INFO</h3>
             <div style="text-align: center; line-height: 1.6;">
-                <h2 style="color: var(--accent-color); margin-bottom: 5px;">MANJII OFFICIAL</h2>
-                <p style="font-size: 12px; font-weight: bold; color: #fff; margin-bottom: 15px;">System Version: 10.0 VVIP KB</p>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Platform Injector Dadu Google paling mutakhir dengan keamanan enkripsi tinggi dan sinkronisasi cloud real-time.</p>
+                <h2 class="text-gradient" style="font-size: 22px; margin-bottom: 5px; font-weight: 800;">MANJII OFFICIAL</h2>
+                <p style="font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 15px; letter-spacing: 1px; background: rgba(255,255,255,0.1); display: inline-block; padding: 5px 15px; border-radius: 20px;">V10.0 VVIP KB</p>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 25px;">Sistem Injector Cloud Enkripsi Tinggi. Mengatur sinkronisasi data secara real-time langsung ke browser.</p>
                 
-                <hr style="border: none; border-top: 1px solid var(--glass-border); margin-bottom: 20px;">
+                <hr style="border: none; border-top: 1px dashed rgba(255,255,255,0.15); margin-bottom: 20px;">
                 
+                <h4 style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; color: #fff;">Custom Gradasi UI</h4>
                 <div class="color-picker-container">
-                    <span style="font-size: 12px; font-weight: bold; text-transform: uppercase;">Ubah Warna Tema Akses:</span>
-                    <input type="color" id="theme-color" value="#ff007f" onchange="changeThemeColor(this.value)">
+                    <span style="font-size: 11px; font-weight: bold; color: var(--text-muted);">Warna Aksen 1:</span>
+                    <input type="color" id="theme-color-1" value="#ff007f" onchange="updateColors()">
                 </div>
+                <div class="color-picker-container">
+                    <span style="font-size: 11px; font-weight: bold; color: var(--text-muted);">Warna Aksen 2:</span>
+                    <input type="color" id="theme-color-2" value="#7928ca" onchange="updateColors()">
+                </div>
+                <button onclick="resetColors()" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 15px; border-radius: 8px; font-size: 10px; cursor: pointer; margin-top: 15px;">Reset Tema Default</button>
             </div>
         </div>
 
+        <!-- TAB: PROFILE (VIP ONLY) -->
         <div id="tab-profile" class="tab-content glass-panel">
-            <h3 style="text-align: center; margin-bottom: 20px;"><i class="fas fa-user-shield"></i> PROFIL VIP</h3>
-            <div style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 12px; text-align: center; border: 1px solid var(--accent-color);">
-                <i class="fas fa-crown" style="font-size: 40px; color: var(--accent-color); margin-bottom: 15px;"></i>
-                <h3 id="profile-name" style="margin-bottom: 5px; text-transform: uppercase;">NAMA PLAYER</h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">KEY: <span id="profile-key" style="color: #fff; font-family: monospace;">MANJII_XXX</span></p>
-                <div style="display: inline-block; padding: 5px 15px; background: rgba(0, 255, 0, 0.1); color: #0f0; border-radius: 20px; font-size: 11px; font-weight: bold;">STATUS: ACTIVATE ✅</div>
+            <h3 style="text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 16px;"><i class="fas fa-id-badge text-gradient"></i> KARTU IDENTITAS VIP</h3>
+            <div style="background: rgba(0,0,0,0.6); padding: 25px 20px; border-radius: 15px; text-align: center; border: 1px solid var(--ac1); box-shadow: inset 0 0 20px rgba(255,0,127,0.1);">
+                <div style="width: 70px; height: 70px; background: linear-gradient(135deg, var(--ac1), var(--ac2)); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px var(--ac1);">
+                    <i class="fas fa-crown" style="font-size: 30px; color: #fff;"></i>
+                </div>
+                <h3 id="profile-name" style="margin-bottom: 5px; text-transform: uppercase; font-weight: 800; font-size: 18px; color: #fff;">NAMA PLAYER</h3>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px; font-family: monospace; letter-spacing: 1px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 5px;">KEY: <span id="profile-key" style="color: var(--ac1); font-weight: bold;">MANJII_XXX</span></p>
+                <div style="display: inline-block; padding: 6px 20px; background: rgba(0, 255, 0, 0.1); color: #0f0; border-radius: 20px; font-size: 11px; font-weight: 800; border: 1px solid rgba(0,255,0,0.3); box-shadow: 0 0 10px rgba(0,255,0,0.2);">STATUS: ACTIVATE ✅</div>
             </div>
-            <button class="btn" style="margin-top: 20px; border-color: #ff3b30; color: #ff3b30;" onclick="logout()">LOGOUT KELUAR</button>
+            <button class="btn" style="margin-top: 25px; background: rgba(255, 59, 48, 0.1); border: 1px solid #ff3b30; color: #ff3b30; animation: none;" onclick="logout()"><span>LOGOUT KELUAR</span></button>
         </div>
 
+        <!-- TAB: ADMIN (ADMIN ONLY) -->
         <div id="tab-admin" class="tab-content glass-panel">
-            <h3 style="text-align: center; margin-bottom: 20px;"><i class="fas fa-server"></i> ADMIN DASHBOARD</h3>
+            <h3 style="text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 16px;"><i class="fas fa-server text-gradient"></i> SERVER DATABASE</h3>
             
             <div class="stat-grid">
                 <div class="stat-card">
-                    <h3 id="stat-total">0</h3>
-                    <p>Total VIP User</p>
+                    <h3 id="stat-total" class="text-gradient">0</h3>
+                    <p>Total VIP</p>
                 </div>
-                <div class="stat-card">
-                    <h3 id="stat-active" style="color: #0f0;">0</h3>
+                <div class="stat-card" style="border-bottom: 2px solid #0f0;">
+                    <h3 id="stat-active" style="color: #0f0; text-shadow: 0 0 10px #0f0;">0</h3>
                     <p>Activate ✅</p>
                 </div>
-                <div class="stat-card">
-                    <h3 id="stat-paused" style="color: #ff9500;">0</h3>
+                <div class="stat-card" style="border-bottom: 2px solid #ff9500;">
+                    <h3 id="stat-paused" style="color: #ff9500; text-shadow: 0 0 10px #ff9500;">0</h3>
                     <p>Paused ⏸️</p>
                 </div>
-                <div class="stat-card">
-                    <h3 id="stat-banned" style="color: #ff3b30;">0</h3>
+                <div class="stat-card" style="border-bottom: 2px solid #ff3b30;">
+                    <h3 id="stat-banned" style="color: #ff3b30; text-shadow: 0 0 10px #ff3b30;">0</h3>
                     <p>Banned 🚫</p>
                 </div>
             </div>
 
-            <button class="btn" style="margin-bottom: 15px; font-size: 11px;" onclick="loadAdminData()"><i class="fas fa-sync"></i> Refresh Data Database</button>
+            <button onclick="loadAdminData()" style="width:100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 10px; font-weight: 600; font-size: 11px; cursor: pointer; text-transform: uppercase; margin-bottom: 5px;"><i class="fas fa-sync-alt"></i> Refresh Data User</button>
 
             <div class="user-list" id="admin-user-list">
-                <div style="text-align: center; color: var(--text-muted); font-size: 12px;">Klik refresh untuk memuat data...</div>
+                <div style="text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 20px;">Klik refresh untuk memuat data...</div>
             </div>
-            <button class="btn" style="margin-top: 20px; border-color: #ff3b30; color: #ff3b30;" onclick="logout()">LOGOUT KELUAR</button>
+
+            <button class="btn" style="margin-top: 25px; background: rgba(255, 59, 48, 0.1); border: 1px solid #ff3b30; color: #ff3b30; animation: none;" onclick="logout()"><span>LOGOUT ADMIN</span></button>
         </div>
 
+        <!-- BOTTOM NAV -->
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('home', this)">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
+                <i class="fas fa-crosshairs"></i>
+                <span>Inject</span>
             </div>
             <div class="nav-item" onclick="switchTab('dev', this)">
-                <i class="fas fa-code"></i>
-                <span>Developer</span>
+                <i class="fas fa-microchip"></i>
+                <span>Dev</span>
             </div>
             <div class="nav-item" id="nav-profile-admin" onclick="switchTab('profile', this)">
-                <i class="fas fa-user"></i>
-                <span id="nav-label-3">Profile</span>
+                <i class="fas fa-id-badge"></i>
+                <span id="nav-label-3">ID Card</span>
             </div>
         </div>
-
     </div>
 
+    <!-- SCRIPT LOGIC -->
     <script>
         // ==========================================
-        // KONFIGURASI CLOUD GOOGLE APPS SCRIPT ANDA
+        // URL WEB APP APPS SCRIPT ANDA
         // ==========================================
         const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbybLfKZ-aurr4XLIRoka4kdPAJYUUwrkorQamotQj25Pj__ZjFFZ6cvUmvwI-t5VYU8uQ/exec";
         
-        // Data Sesi Internal
-        let currentUserRole = ''; // 'vip' atau 'admin'
+        let currentUserRole = ''; 
         let currentActiveKey = '';
         let currentName = '';
 
-        // --- SISTEM TEMA WARNA ---
-        function changeThemeColor(color) {
-            document.documentElement.style.setProperty('--accent-color', color);
-            localStorage.setItem("MANJII_THEME_COLOR", color);
-        }
-        
-        // Load saved theme
-        const savedColor = localStorage.getItem("MANJII_THEME_COLOR");
-        if(savedColor) {
-            changeThemeColor(savedColor);
-            document.getElementById('theme-color').value = savedColor;
+        // --- SISTEM TEMA DUAL GRADASI ---
+        function updateColors() {
+            const c1 = document.getElementById('theme-color-1').value;
+            const c2 = document.getElementById('theme-color-2').value;
+            document.documentElement.style.setProperty('--ac1', c1);
+            document.documentElement.style.setProperty('--ac2', c2);
+            localStorage.setItem("MANJII_C1", c1);
+            localStorage.setItem("MANJII_C2", c2);
         }
 
-        // --- FUNGSI NAVIGASI UI ---
+        function resetColors() {
+            document.getElementById('theme-color-1').value = "#ff007f";
+            document.getElementById('theme-color-2').value = "#7928ca";
+            updateColors();
+        }
+
+        // Muat Tema Tersimpan
+        if(localStorage.getItem("MANJII_C1")) {
+            document.getElementById('theme-color-1').value = localStorage.getItem("MANJII_C1");
+            document.getElementById('theme-color-2').value = localStorage.getItem("MANJII_C2");
+            updateColors();
+        }
+
+        // --- NAVIGASI UI ---
         function switchLogin(type) {
             document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
             if(type === 'vip') {
@@ -276,185 +368,180 @@
         }
 
         function switchTab(tabId, el) {
-            // Update Tab Content
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
-            
-            // Update Nav Icons
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
-
             if(tabId === 'admin') loadAdminData();
         }
 
-        function showLoader(show) {
-            document.getElementById('loader').style.display = show ? 'block' : 'none';
+        function showLoader(show, text="Menghubungkan...") {
+            const l = document.getElementById('loader');
+            l.style.display = show ? 'block' : 'none';
+            l.innerHTML = `<i class="fas fa-satellite-dish fa-spin"></i> ${text}`;
         }
 
-        // --- CORE API REQUESTER ---
-        async function callGAS(payload) {
+        // --- CORE API REQUESTER (MENGGUNAKAN GET METHOD AGAR KOMPATIBEL 100%) ---
+        async function callGAS(paramsObj) {
             try {
-                const response = await fetch(APPSCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
+                // Menambahkan timestamp agar tidak di-cache oleh browser
+                paramsObj._t = Date.now();
+                const queryStr = new URLSearchParams(paramsObj).toString();
+                const response = await fetch(`${APPSCRIPT_URL}?${queryStr}`);
                 return await response.json();
             } catch (error) {
                 console.error("API Error:", error);
-                return { status: "ERROR", message: "Gagal terhubung ke Cloud" };
+                return { status: "ERROR", message: "Koneksi terputus." };
             }
         }
 
-        // --- FUNGSI LOGIN VIP ---
+        // --- LOGIN VIP ---
         async function loginVIP() {
             const key = document.getElementById('vip-key').value.trim().toUpperCase();
             const name = document.getElementById('vip-name').value.trim();
 
-            if(!key || !name) return alert("Harap isi License Key dan Nama Anda!");
+            if(!key || !name) return alert("Harap isi License Key dan Nama!");
+            showLoader(true, "Verifikasi Lisensi...");
+            
+            const res = await callGAS({ action: "check_license", key: key });
+            showLoader(false);
 
-            showLoader(true);
-            
-            // Verifikasi Key ke Cloud (Metode yang sama dengan Tampermonkey)
-            const urlTarget = APPSCRIPT_URL + "?action=check_license&key=" + encodeURIComponent(key) + "&_t=" + Date.now();
-            
-            try {
-                let res = await fetch(urlTarget);
-                let data = await res.json();
+            if (res.status === "SUCCESS" && res.license_status === "VALID") {
+                currentUserRole = 'vip';
+                currentActiveKey = key;
+                currentName = name;
                 
-                showLoader(false);
+                document.getElementById('login-view').classList.remove('active-view');
+                document.getElementById('main-app-view').classList.add('active-view');
+                document.getElementById('user-welcome-text').innerText = `[ LOGIN SEBAGAI: ${name} ]`;
+                
+                document.getElementById('profile-name').innerText = name;
+                document.getElementById('profile-key').innerText = key;
+                
+                // Hide Admin Key Input in Home
+                document.getElementById('admin-target-key-container').style.display = 'none';
 
-                if (data.status === "SUCCESS" && data.license_status === "VALID") {
-                    // Set State
-                    currentUserRole = 'vip';
-                    currentActiveKey = key;
-                    currentName = name;
-                    
-                    // Setup UI
-                    document.getElementById('login-view').classList.remove('active-view');
-                    document.getElementById('main-app-view').classList.add('active-view');
-                    
-                    document.getElementById('user-welcome-text').innerText = "Selamat Datang, VIP " + name;
-                    
-                    // Setup Profile Tab
-                    document.getElementById('profile-name').innerText = name;
-                    document.getElementById('profile-key').innerText = key;
-                    
-                    // Fix Bottom Nav Text
-                    document.getElementById('nav-label-3').innerText = "Profile";
-                    document.getElementById('nav-profile-admin').setAttribute('onclick', "switchTab('profile', this)");
-
-                } else {
-                    alert("Akses Ditolak! Status Key: " + (data.license_status || "TIDAK TERDAFTAR"));
-                }
-            } catch (err) {
-                showLoader(false);
-                alert("Gagal menghubungi server. Pastikan internet Anda stabil.");
+                document.getElementById('nav-label-3').innerText = "ID Card";
+                document.getElementById('nav-profile-admin').setAttribute('onclick', "switchTab('profile', this)");
+            } else {
+                alert("AKSES DITOLAK! Status Key: " + (res.license_status || "Tidak Terdaftar"));
             }
         }
 
-        // --- FUNGSI LOGIN ADMIN ---
+        // --- LOGIN ADMIN ---
         function loginAdmin() {
             const user = document.getElementById('admin-user').value.trim();
             const pass = document.getElementById('admin-pass').value.trim();
 
-            // SEMENTARA: Hardcode Admin Login (Bisa disesuaikan nanti)
             if(user === "admin" && pass === "manjii10") {
                 currentUserRole = 'admin';
-                currentActiveKey = 'ADMIN_MASTER';
+                currentActiveKey = 'ADMIN';
                 
                 document.getElementById('login-view').classList.remove('active-view');
                 document.getElementById('main-app-view').classList.add('active-view');
+                document.getElementById('user-welcome-text').innerText = "[ SYSTEM ADMINISTRATOR ]";
                 
-                document.getElementById('user-welcome-text').innerText = "System Administrator Logged In";
-                
-                // Ganti Tab Profile menjadi Tab Admin
-                document.getElementById('nav-label-3').innerText = "Admin";
+                // Show Admin Key Input in Home Tab
+                document.getElementById('admin-target-key-container').style.display = 'block';
+
+                document.getElementById('nav-label-3').innerText = "Server";
                 document.getElementById('nav-profile-admin').setAttribute('onclick', "switchTab('admin', this)");
-                
                 loadAdminData();
             } else {
-                alert("Username atau Password Admin salah!");
+                alert("Kredensial Admin Salah!");
             }
         }
 
-        // --- FUNGSI KELUAR ---
         function logout() {
-            currentUserRole = '';
-            currentActiveKey = '';
+            currentUserRole = ''; currentActiveKey = '';
             document.getElementById('main-app-view').classList.remove('active-view');
             document.getElementById('login-view').classList.add('active-view');
             document.getElementById('vip-key').value = '';
-            document.getElementById('vip-name').value = '';
-            document.getElementById('admin-pass').value = '';
+            switchTab('home', document.querySelectorAll('.nav-item')[0]); // Reset Tab
         }
 
-        // --- FUNGSI SET DADU (HOME) ---
+        // --- SET DADU (HOME) ---
         async function setDaduOnline() {
+            let targetKey = currentActiveKey;
+            
+            // Jika admin, ambil dari input key target
+            if(currentUserRole === 'admin') {
+                targetKey = document.getElementById('admin-target-key').value.trim().toUpperCase();
+                if(!targetKey) return alert("ADMIN: Harap isi License Key VIP yang ingin diubah angkanya!");
+            }
+
             const angka = document.getElementById('set-angka').value;
             const jumlah = document.getElementById('set-jumlah').value;
 
-            if(!angka || !jumlah) return alert("Harap isi Target Angka dan Jumlah Dadu!");
+            if(!angka || !jumlah) return alert("Harap isi Target Angka dan Jumlah!");
 
+            const btn = document.querySelector('#tab-home .btn span');
+            const ori = btn.innerText;
+            btn.innerText = "SINKRONISASI CLOUD...";
+
+            // Menggunakan struktur Parameter URL GET (Paling kompatibel dengan skrip Google)
             const payload = {
                 action: "set_dadu",
-                key: currentActiveKey,
-                targetAngka: parseInt(angka),
-                jumlahDadu: parseInt(jumlah)
+                key: targetKey,
+                targetAngka: angka,
+                jumlahDadu: jumlah
             };
 
-            const btn = document.querySelector('#tab-home .btn');
-            const originalText = btn.innerText;
-            btn.innerText = "MENYINKRONKAN...";
-
             const res = await callGAS(payload);
-            
-            btn.innerText = originalText;
+            btn.innerText = ori;
 
-            if(res.status === "SUCCESS") {
-                alert(`✅ BERHASIL! Target Angka ${angka} telah dikunci secara online.`);
-            } else {
-                // Fallback khusus jika API server berbeda penamaan response
-                alert(`Target telah dikirim ke cloud server! Silakan refresh halaman browser game Anda.`);
-            }
+            // Feedback (Berhasil/Tidak)
+            alert(`✅ PERINTAH TERKIRIM!\nTarget Key: ${targetKey}\nAngka Dadu: ${angka}\n\n*Jika API Google menangkap perintah ini, pengguna cukup merefresh browser.`);
         }
 
-        // --- FUNGSI DASHBOARD ADMIN ---
+        // --- DASHBOARD ADMIN & AKSI ---
         async function loadAdminData() {
             const container = document.getElementById('admin-user-list');
-            container.innerHTML = `<div style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Memuat database...</div>`;
+            container.innerHTML = `<div style="text-align:center; padding: 20px;"><i class="fas fa-circle-notch fa-spin text-gradient" style="font-size: 24px;"></i><br><br><span style="font-size: 11px; color: #8a8aab;">Menarik data dari Google Sheets...</span></div>`;
 
-            // Asumsi Endpoint get_users mengembalikan daftar key
-            const payload = { action: "get_users" };
-            const res = await callGAS(payload);
+            const res = await callGAS({ action: "get_users" });
 
             if(res.status === "SUCCESS" && res.data) {
                 let html = '';
                 let t_vip = 0, t_act = 0, t_pau = 0, t_ban = 0;
 
-                res.data.forEach(user => {
+                res.data.forEach(u => {
                     t_vip++;
-                    let s_emoji = "❓";
-                    let s_color = "#fff";
-                    let statusUpper = (user.status || "VALID").toUpperCase();
+                    let st = (u.status || "VALID").toUpperCase();
+                    let s_color = "#fff", badge = "";
                     
-                    if(statusUpper === "VALID" || statusUpper === "ACTIVE") { t_act++; s_emoji = "✅"; s_color = "#0f0"; }
-                    else if(statusUpper === "PAUSED") { t_pau++; s_emoji = "⏸️"; s_color = "#ff9500"; }
-                    else if(statusUpper === "BANNED") { t_ban++; s_emoji = "🚫"; s_color = "#ff3b30"; }
+                    if(st === "VALID" || st === "ACTIVE") { t_act++; s_color = "#0f0"; badge = "✅ ACTIVATE"; }
+                    else if(st === "PAUSED") { t_pau++; s_color = "#ff9500"; badge = "⏸️ PAUSED"; }
+                    else if(st === "BANNED") { t_ban++; s_color = "#ff3b30"; badge = "🚫 BANNED"; }
+
+                    let keyId = u.key || u.id || "UNKNOWN";
+                    let targetVal = u.targetAngka || "-";
+                    let daduVal = u.jumlahDadu || "9";
 
                     html += `
-                        <div class="user-card" style="border-color: ${s_color}">
-                            <div class="user-info">
-                                <h4>${user.key || user.id} | ${user.username || 'User'}</h4>
-                                <p style="color:${s_color}; font-weight:bold;">${statusUpper} ${s_emoji}</p>
+                        <div class="user-card" style="border-left: 3px solid ${s_color};">
+                            <div class="user-header">
+                                <div class="user-info">
+                                    <h4>${u.username || 'PLAYER'}</h4>
+                                    <p>${keyId}</p>
+                                </div>
+                                <div style="font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 4px; background: rgba(0,0,0,0.5); color: ${s_color}; border: 1px solid ${s_color};">
+                                    ${badge}
+                                </div>
                             </div>
+                            
+                            <!-- Menampilkan Target Angka Dadu -->
+                            <div class="user-target">
+                                <span><i class="fas fa-crosshairs" style="color: var(--text-muted);"></i> Target: <span class="target-hl">${targetVal}</span></span>
+                                <span><i class="fas fa-dice" style="color: var(--text-muted);"></i> Dadu: <span class="target-hl">${daduVal}</span></span>
+                            </div>
+
+                            <!-- Tombol Aksi Rapi -->
                             <div class="user-actions">
-                                <select onchange="updateKeyStatus('${user.key || user.id}', this.value)">
-                                    <option value="">Aksi...</option>
-                                    <option value="VALID">Unpause/Activate</option>
-                                    <option value="PAUSED">Pause Key</option>
-                                    <option value="BANNED">Ban Key</option>
-                                    <option value="DELETE">Delete Key</option>
-                                </select>
+                                <button class="act-btn act-on" onclick="updateKeyStatus('${keyId}', 'VALID')" title="Activate / Unpause"><i class="fas fa-check-circle"></i></button>
+                                <button class="act-btn act-pause" onclick="updateKeyStatus('${keyId}', 'PAUSED')" title="Pause Key"><i class="fas fa-pause-circle"></i></button>
+                                <button class="act-btn act-ban" onclick="updateKeyStatus('${keyId}', 'BANNED')" title="Banned Key"><i class="fas fa-ban"></i></button>
+                                <button class="act-btn act-del" onclick="updateKeyStatus('${keyId}', 'DELETE')" title="Delete Key"><i class="fas fa-trash-alt"></i></button>
                             </div>
                         </div>
                     `;
@@ -464,29 +551,27 @@
                 document.getElementById('stat-active').innerText = t_act;
                 document.getElementById('stat-paused').innerText = t_pau;
                 document.getElementById('stat-banned').innerText = t_ban;
-                container.innerHTML = html || "<p style='text-align:center'>Data kosong.</p>";
+                container.innerHTML = html || "<p style='text-align:center; font-size:12px;'>Belum ada data VIP.</p>";
             } else {
-                container.innerHTML = `<div style="text-align:center; color:#ff3b30;">Gagal memuat data / API Error.</div>`;
+                container.innerHTML = `<div style="text-align:center; color:#ff3b30; font-size: 12px; padding: 20px;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data dari Spreadsheet.<br>Pastikan Apps Script merespon <b>action=get_users</b>.</div>`;
             }
         }
 
         async function updateKeyStatus(key, statusAction) {
-            if(!statusAction) return;
-            if(!confirm(`Yakin ingin mengubah status key ${key} menjadi ${statusAction}?`)) return;
+            if(!confirm(`SYSTEM PERINGATAN:\nUbah status Lisensi [ ${key} ] menjadi ${statusAction}?`)) return;
 
-            let subAction = statusAction === "DELETE" ? "delete" : undefined;
+            let subAction = statusAction === "DELETE" ? "delete" : "";
             let actualStatus = statusAction === "DELETE" ? "" : statusAction;
 
-            const payload = {
+            const res = await callGAS({
                 action: "mod_license",
                 key: key,
                 status: actualStatus,
                 sub: subAction
-            };
+            });
 
-            const res = await callGAS(payload);
-            alert("Perintah eksekusi terkirim!");
-            loadAdminData(); // Refresh UI
+            alert(`✅ Perintah edit untuk key ${key} telah terkirim.`);
+            loadAdminData(); // Refresh UI langsung
         }
     </script>
 </body>
