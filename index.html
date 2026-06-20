@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MANJII VVIP KB - Remote Panel</title>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -52,24 +50,15 @@
             text-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
         }
 
-        /* TAMPILAN KACA DENGAN STROKE MENYALA */
+        /* TAMPILAN KACA DENGAN TEPI HALUS (SMOOTH BORDER) */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1.5px solid transparent;
-            border-image: linear-gradient(45deg, var(--ac1), var(--ac2)) 1;
-            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15); /* Tepi Sangat Halus */
+            border-radius: 20px; /* Lengkungan Mulus */
             padding: 25px;
             box-shadow: 0 0 25px rgba(121, 40, 202, 0.3), inset 0 0 15px rgba(255, 0, 127, 0.1);
-            position: relative;
-        }
-        /* Fallback border-radius untuk border-image */
-        .glass-panel::before {
-            content: ""; position: absolute; inset: 0; border-radius: 20px;
-            padding: 1.5px; background: linear-gradient(45deg, var(--ac1), var(--ac2));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
         }
 
         .logo-container { text-align: center; margin-bottom: 20px; }
@@ -132,9 +121,9 @@
         .user-card:hover { border-color: var(--ac2); box-shadow: 0 0 15px rgba(121, 40, 202, 0.2); }
         .user-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
         .user-info h4 { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; color: #fff; }
-        .user-info p { font-size: 10px; margin-top: 3px; font-family: monospace; letter-spacing: 1px; }
-        .user-target { background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
-        .target-hl { color: var(--ac1); font-weight: bold; font-size: 13px; }
+        .user-info p { font-size: 10px; margin-top: 3px; font-family: monospace; letter-spacing: 1px; color: #b3b3b3;}
+        .user-target { background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; font-size: 11px; display: flex; justify-content: space-around; align-items: center; }
+        .target-hl { color: var(--ac1); font-weight: bold; font-size: 14px; text-shadow: 0 0 10px var(--ac1);}
         
         /* TOMBOL AKSI ADMIN RAPIH */
         .user-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 5px; }
@@ -162,7 +151,6 @@
 </head>
 <body>
 
-    <!-- 1. LOGIN VIEW -->
     <div id="login-view" class="active-view">
         <div class="glass-panel" style="margin-top: 20px;">
             <div class="logo-container">
@@ -190,8 +178,8 @@
 
             <div id="form-admin" style="display: none;">
                 <div class="input-group">
-                    <label><i class="fas fa-shield-alt"></i> Username</label>
-                    <input type="text" id="admin-user" placeholder="Admin Username">
+                    <label><i class="fas fa-shield-alt"></i> Username Admin</label>
+                    <input type="text" id="admin-user" placeholder="Username...">
                 </div>
                 <div class="input-group">
                     <label><i class="fas fa-lock"></i> Password</label>
@@ -204,7 +192,6 @@
         </div>
     </div>
 
-    <!-- 2. MAIN APP VIEW -->
     <div id="main-app-view">
         
         <div style="text-align: center; margin-bottom: 25px;">
@@ -212,11 +199,9 @@
             <p style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;" id="user-welcome-text">Loading...</p>
         </div>
 
-        <!-- TAB: HOME -->
         <div id="tab-home" class="tab-content active glass-panel">
             <h3 style="text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 16px;"><i class="fas fa-crosshairs text-gradient"></i> TARGET INJECTOR</h3>
             
-            <!-- INPUT KHUSUS ADMIN DI MENU HOME -->
             <div id="admin-target-key-container" style="display: none;" class="input-group">
                 <label style="color: var(--ac1);"><i class="fas fa-search"></i> Target License Key (VIP)</label>
                 <input type="text" id="admin-target-key" placeholder="Masukkan Key VIP yang mau diubah...">
@@ -233,7 +218,6 @@
             <button class="btn" onclick="setDaduOnline()"><span>KUNCI ANGKA KE SERVER</span></button>
         </div>
 
-        <!-- TAB: DEVELOPER & TEMA -->
         <div id="tab-dev" class="tab-content glass-panel">
             <h3 style="text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 16px;"><i class="fas fa-microchip text-gradient"></i> DEVELOPER INFO</h3>
             <div style="text-align: center; line-height: 1.6;">
@@ -256,7 +240,6 @@
             </div>
         </div>
 
-        <!-- TAB: PROFILE (VIP ONLY) -->
         <div id="tab-profile" class="tab-content glass-panel">
             <h3 style="text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 16px;"><i class="fas fa-id-badge text-gradient"></i> KARTU IDENTITAS VIP</h3>
             <div style="background: rgba(0,0,0,0.6); padding: 25px 20px; border-radius: 15px; text-align: center; border: 1px solid var(--ac1); box-shadow: inset 0 0 20px rgba(255,0,127,0.1);">
@@ -270,7 +253,6 @@
             <button class="btn" style="margin-top: 25px; background: rgba(255, 59, 48, 0.1); border: 1px solid #ff3b30; color: #ff3b30; animation: none;" onclick="logout()"><span>LOGOUT KELUAR</span></button>
         </div>
 
-        <!-- TAB: ADMIN (ADMIN ONLY) -->
         <div id="tab-admin" class="tab-content glass-panel">
             <h3 style="text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 16px;"><i class="fas fa-server text-gradient"></i> SERVER DATABASE</h3>
             
@@ -302,7 +284,6 @@
             <button class="btn" style="margin-top: 25px; background: rgba(255, 59, 48, 0.1); border: 1px solid #ff3b30; color: #ff3b30; animation: none;" onclick="logout()"><span>LOGOUT ADMIN</span></button>
         </div>
 
-        <!-- BOTTOM NAV -->
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('home', this)">
                 <i class="fas fa-crosshairs"></i>
@@ -319,7 +300,6 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC -->
     <script>
         // ==========================================
         // URL WEB APP APPS SCRIPT ANDA
@@ -346,7 +326,6 @@
             updateColors();
         }
 
-        // Muat Tema Tersimpan
         if(localStorage.getItem("MANJII_C1")) {
             document.getElementById('theme-color-1').value = localStorage.getItem("MANJII_C1");
             document.getElementById('theme-color-2').value = localStorage.getItem("MANJII_C2");
@@ -381,29 +360,50 @@
             l.innerHTML = `<i class="fas fa-satellite-dish fa-spin"></i> ${text}`;
         }
 
-        // --- CORE API REQUESTER (MENGGUNAKAN GET METHOD AGAR KOMPATIBEL 100%) ---
-        async function callGAS(paramsObj) {
+        // =========================================================================
+        // PENTING: KONEKSI API DIPISAHKAN BERDASARKAN METODE (GET vs POST)
+        // Hal ini menyesuaikan script Telegram Anda yang menerima GET untuk Cek Lisensi,
+        // namun membutuhkan POST untuk input setting Target Angka dan Load Data.
+        // =========================================================================
+
+        // 1. Fungsi GET (Khusus Cek Lisensi seperti di Userscript)
+        async function fetchGET(action, key) {
             try {
-                // Menambahkan timestamp agar tidak di-cache oleh browser
-                paramsObj._t = Date.now();
-                const queryStr = new URLSearchParams(paramsObj).toString();
-                const response = await fetch(`${APPSCRIPT_URL}?${queryStr}`);
+                const url = `${APPSCRIPT_URL}?action=${action}&key=${encodeURIComponent(key)}&_t=${Date.now()}`;
+                const response = await fetch(url);
                 return await response.json();
             } catch (error) {
-                console.error("API Error:", error);
-                return { status: "ERROR", message: "Koneksi terputus." };
+                console.error("GET Error:", error);
+                return { status: "ERROR" };
             }
         }
 
-        // --- LOGIN VIP ---
+        // 2. Fungsi POST (Khusus Set Target, Load Database, Aksi Admin - Seperti Node.js Bot)
+        async function fetchPOST(payload) {
+            try {
+                const response = await fetch(APPSCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8" // Menghindari masalah blokir CORS di Browser
+                    },
+                    body: JSON.stringify(payload)
+                });
+                return await response.json();
+            } catch (error) {
+                console.error("POST Error:", error);
+                return { status: "ERROR" };
+            }
+        }
+
+        // --- LOGIN VIP (Menggunakan GET Request) ---
         async function loginVIP() {
             const key = document.getElementById('vip-key').value.trim().toUpperCase();
             const name = document.getElementById('vip-name').value.trim();
 
             if(!key || !name) return alert("Harap isi License Key dan Nama!");
-            showLoader(true, "Verifikasi Lisensi...");
+            showLoader(true, "Verifikasi Lisensi Cloud...");
             
-            const res = await callGAS({ action: "check_license", key: key });
+            const res = await fetchGET("check_license", key);
             showLoader(false);
 
             if (res.status === "SUCCESS" && res.license_status === "VALID") {
@@ -418,13 +418,13 @@
                 document.getElementById('profile-name').innerText = name;
                 document.getElementById('profile-key').innerText = key;
                 
-                // Hide Admin Key Input in Home
+                // Sembunyikan form key admin di menu Set Dadu
                 document.getElementById('admin-target-key-container').style.display = 'none';
 
                 document.getElementById('nav-label-3').innerText = "ID Card";
                 document.getElementById('nav-profile-admin').setAttribute('onclick', "switchTab('profile', this)");
             } else {
-                alert("AKSES DITOLAK! Status Key: " + (res.license_status || "Tidak Terdaftar"));
+                alert("AKSES DITOLAK! Status Key: " + (res.license_status || "Tidak Terdaftar / Invalid"));
             }
         }
 
@@ -441,14 +441,14 @@
                 document.getElementById('main-app-view').classList.add('active-view');
                 document.getElementById('user-welcome-text').innerText = "[ SYSTEM ADMINISTRATOR ]";
                 
-                // Show Admin Key Input in Home Tab
+                // Munculkan kolom input KEY di menu Set Dadu (Khusus Admin)
                 document.getElementById('admin-target-key-container').style.display = 'block';
 
                 document.getElementById('nav-label-3').innerText = "Server";
                 document.getElementById('nav-profile-admin').setAttribute('onclick', "switchTab('admin', this)");
                 loadAdminData();
             } else {
-                alert("Kredensial Admin Salah!");
+                alert("Username atau Password Admin Salah!");
             }
         }
 
@@ -457,14 +457,13 @@
             document.getElementById('main-app-view').classList.remove('active-view');
             document.getElementById('login-view').classList.add('active-view');
             document.getElementById('vip-key').value = '';
-            switchTab('home', document.querySelectorAll('.nav-item')[0]); // Reset Tab
+            switchTab('home', document.querySelectorAll('.nav-item')[0]);
         }
 
-        // --- SET DADU (HOME) ---
+        // --- SET DADU (HOME) (Menggunakan POST Request) ---
         async function setDaduOnline() {
             let targetKey = currentActiveKey;
             
-            // Jika admin, ambil dari input key target
             if(currentUserRole === 'admin') {
                 targetKey = document.getElementById('admin-target-key').value.trim().toUpperCase();
                 if(!targetKey) return alert("ADMIN: Harap isi License Key VIP yang ingin diubah angkanya!");
@@ -479,27 +478,29 @@
             const ori = btn.innerText;
             btn.innerText = "SINKRONISASI CLOUD...";
 
-            // Menggunakan struktur Parameter URL GET (Paling kompatibel dengan skrip Google)
             const payload = {
                 action: "set_dadu",
                 key: targetKey,
-                targetAngka: angka,
-                jumlahDadu: jumlah
+                targetAngka: parseInt(angka),
+                jumlahDadu: parseInt(jumlah)
             };
 
-            const res = await callGAS(payload);
+            const res = await fetchPOST(payload);
             btn.innerText = ori;
 
-            // Feedback (Berhasil/Tidak)
-            alert(`✅ PERINTAH TERKIRIM!\nTarget Key: ${targetKey}\nAngka Dadu: ${angka}\n\n*Jika API Google menangkap perintah ini, pengguna cukup merefresh browser.`);
+            if(res.status === "SUCCESS") {
+                alert(`✅ PERINTAH TERKIRIM BERHASIL!\n\nTarget Key: ${targetKey}\nAngka Dadu: ${angka}\nJumlah: ${jumlah}\n\n*Pengguna VIP cukup refresh browser game untuk mulai inject.`);
+            } else {
+                alert("⚠️ Respon Server: " + (res.message || "Gagal mengatur angka dadu."));
+            }
         }
 
-        // --- DASHBOARD ADMIN & AKSI ---
+        // --- DASHBOARD ADMIN & AKSI (Menggunakan POST Request) ---
         async function loadAdminData() {
             const container = document.getElementById('admin-user-list');
             container.innerHTML = `<div style="text-align:center; padding: 20px;"><i class="fas fa-circle-notch fa-spin text-gradient" style="font-size: 24px;"></i><br><br><span style="font-size: 11px; color: #8a8aab;">Menarik data dari Google Sheets...</span></div>`;
 
-            const res = await callGAS({ action: "get_users" });
+            const res = await fetchPOST({ action: "get_users" });
 
             if(res.status === "SUCCESS" && res.data) {
                 let html = '';
@@ -515,8 +516,8 @@
                     else if(st === "BANNED") { t_ban++; s_color = "#ff3b30"; badge = "🚫 BANNED"; }
 
                     let keyId = u.key || u.id || "UNKNOWN";
-                    let targetVal = u.targetAngka || "-";
-                    let daduVal = u.jumlahDadu || "9";
+                    let targetVal = u.targetAngka || "0";
+                    let daduVal = u.jumlahDadu || "0";
 
                     html += `
                         <div class="user-card" style="border-left: 3px solid ${s_color};">
@@ -530,13 +531,11 @@
                                 </div>
                             </div>
                             
-                            <!-- Menampilkan Target Angka Dadu -->
                             <div class="user-target">
                                 <span><i class="fas fa-crosshairs" style="color: var(--text-muted);"></i> Target: <span class="target-hl">${targetVal}</span></span>
                                 <span><i class="fas fa-dice" style="color: var(--text-muted);"></i> Dadu: <span class="target-hl">${daduVal}</span></span>
                             </div>
 
-                            <!-- Tombol Aksi Rapi -->
                             <div class="user-actions">
                                 <button class="act-btn act-on" onclick="updateKeyStatus('${keyId}', 'VALID')" title="Activate / Unpause"><i class="fas fa-check-circle"></i></button>
                                 <button class="act-btn act-pause" onclick="updateKeyStatus('${keyId}', 'PAUSED')" title="Pause Key"><i class="fas fa-pause-circle"></i></button>
@@ -551,9 +550,9 @@
                 document.getElementById('stat-active').innerText = t_act;
                 document.getElementById('stat-paused').innerText = t_pau;
                 document.getElementById('stat-banned').innerText = t_ban;
-                container.innerHTML = html || "<p style='text-align:center; font-size:12px;'>Belum ada data VIP.</p>";
+                container.innerHTML = html || "<p style='text-align:center; font-size:12px;'>Belum ada data VIP di Spreadsheets.</p>";
             } else {
-                container.innerHTML = `<div style="text-align:center; color:#ff3b30; font-size: 12px; padding: 20px;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data dari Spreadsheet.<br>Pastikan Apps Script merespon <b>action=get_users</b>.</div>`;
+                container.innerHTML = `<div style="text-align:center; color:#ff3b30; font-size: 12px; padding: 20px;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data dari Spreadsheet.<br><br>Status Server: ${res.message || "Method POST error"}</div>`;
             }
         }
 
@@ -563,15 +562,19 @@
             let subAction = statusAction === "DELETE" ? "delete" : "";
             let actualStatus = statusAction === "DELETE" ? "" : statusAction;
 
-            const res = await callGAS({
+            const res = await fetchPOST({
                 action: "mod_license",
                 key: key,
                 status: actualStatus,
                 sub: subAction
             });
 
-            alert(`✅ Perintah edit untuk key ${key} telah terkirim.`);
-            loadAdminData(); // Refresh UI langsung
+            if(res.status === "SUCCESS") {
+                alert(`✅ Perintah edit status untuk key ${key} telah sukses.`);
+                loadAdminData(); // Refresh UI langsung
+            } else {
+                alert(`❌ Gagal mengubah status.`);
+            }
         }
     </script>
 </body>
